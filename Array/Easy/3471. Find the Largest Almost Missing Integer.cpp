@@ -66,7 +66,41 @@ Constraints:
 
 **/
 
+//Brute force
+#include <vector>
+#include <unordered_set>
+#include <unordered_map>
+#include <algorithm>
 
+class Solution {
+public:
+    int largestInteger(std::vector<int>& nums, int k) {
+        int n = nums.size();
+        std::unordered_map<int, int> subarrayCount;
+
+        // Iterate through all valid starting positions for subarrays of size k
+        for (int i = 0; i <= n - k; ++i) {
+            std::unordered_set<int> uniqueInSubarray;
+            for (int j = i; j < i + k; ++j) {
+                uniqueInSubarray.insert(nums[j]);
+            }
+            for (int num : uniqueInSubarray) {
+                subarrayCount[num]++;
+            }
+        }
+
+        int maxVal = -1;
+        for (auto& [num, count] : subarrayCount) {
+            if (count == 1) {
+                maxVal = std::max(maxVal, num);
+            }
+        }
+
+        return maxVal;
+    }
+};
+
+//optimized
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
