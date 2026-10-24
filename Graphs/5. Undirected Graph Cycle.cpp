@@ -25,6 +25,8 @@ Constraints:
 
 */
 
+
+//Using DFS TC: O(V+E)
 class Solution {
     
   public:
@@ -38,6 +40,51 @@ class Solution {
             }
             else if(newEdge != parent){
                 return true;
+            }
+        }
+        return false;
+    }
+  public:
+    bool isCycle(int V, vector<vector<int>>& edges) {
+        vector<bool>vis(V, false);
+        // Code here
+        vector<vector<int>> adj(V);
+        for(auto edge : edges){
+           int src = edge[0], dst = edge[1];
+           adj[src].push_back(dst);
+           adj[dst].push_back(src);
+        }
+        for(int i = 0; i<V; i++){
+                if(!vis[i]){
+                    if(dfs(adj, vis, i, -1 )) return true;
+                }
+        }
+        return false;
+    }
+};
+
+
+//Using BFS TC : O(V+E)
+
+class Solution {
+    
+  public:
+    bool dfs(vector<vector<int>>& adj, vector<bool>&vis, int edge, int parent){
+        vis[edge] = true;
+        queue<pair<int, int>>q;
+        q.push({edge, -1});
+        while(!q.empty()){
+            int e = q.front().first;
+            int p = q.front().second;
+            q.pop();
+            for(auto n : adj[e]){
+                if(!vis[n]){
+                    vis[n] = true;
+                    q.push({n, e});
+                }
+                else if(n != p){
+                    return true;
+                }
             }
         }
         return false;
